@@ -1,0 +1,9 @@
+--- 
+mesos::masters: 
+  - pastel-30.toulouse.grid5000.fr 
+  - pastel-31.toulouse.grid5000.fr 
+  - pastel-34.toulouse.grid5000.fr
+mesos::slaves: 
+  - pastel-36.toulouse.grid5000.fr 
+  - pastel-39.toulouse.grid5000.fr 
+  - pastel-53.toulouse.grid5000.fr

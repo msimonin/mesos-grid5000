@@ -1,0 +1,7 @@
+--- 
+mesos::masters:<% @masters.each do |master| -%> 
+  - <%= master -%>
+<% end %>
+mesos::slaves:<% @slaves.each do |slave| -%> 
+  - <%= slave-%>
+<% end %>

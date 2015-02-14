@@ -1,0 +1,10 @@
+Gemfile.lock
+.xp_cache
+node_modules
+exports
+bower_components
+xpm_modules
+config/
+puppet
+tmp
+
