@@ -33,6 +33,7 @@ namespace :mesos do
 
   namespace :puppet do
   
+    desc 'Configure nodes using puppet'
     task :default do
       puppet
       generateSitepp
@@ -44,13 +45,11 @@ namespace :mesos do
 
 
 
-    desc 'install puppet'
     task :puppet, :roles => [:mesos] do
       set :default_environment, proxy
       run 'curl https://raw.githubusercontent.com/pmorillon/puppet-puppet/master/extras/bootstrap/puppet_install.sh | PUPPET_VERSION=3.7.1 sh'
     end
 
-    desc 'generate site.pp and hiera'
     task :generateSitepp do
       masters = find_servers :roles => [:mesos_master]
       manifest = "" 
@@ -99,18 +98,15 @@ namespace :mesos do
 
     end
     
-    desc 'upload puppet modules'
     task :transfer, :roles => [:mesos] do
         upload "puppet", "/etc/", :recursive => :true, :via => :scp  
     end
 
-    desc 'apply master'
     task :apply_master, :roles => [:mesos_master] do
       set :default_environment, proxy
       run "puppet apply /etc/puppet/manifests/site.pp"
     end
 
-    desc 'apply slave'
     task :apply_slave, :roles => [:mesos_slave] do
       set :default_environment, proxy
       run "puppet apply /etc/puppet/manifests/site.pp"
