@@ -11,9 +11,17 @@ class mesos::role::master {
   #zookeeper are colocated with master in this depoyment
   $zhosts = hiera("mesos::masters")
 
-  package{ 'zookeeper':
+  # zookeeper init script
+  package{ 'zookeeperd':
     ensure => installed
   }
+  
+  # zookeeper shell script / example conf
+  package{ 'zookeeper':
+    ensure  => installed,
+    require => Package['zookeeperd']
+  }
+
 
   file{ '/etc/zookeeper/conf/myid':
     content => $myid,

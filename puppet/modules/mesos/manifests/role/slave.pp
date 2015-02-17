@@ -8,8 +8,8 @@ class mesos::role::slave {
   #
   $zhosts = hiera("mesos::masters")
 
-  service{ 'zookeeper': 
-    ensure  => stopped,
+  package{ 'zookeeperd':
+    ensure => absent
   }
 
   service{ 'mesos-slave':
