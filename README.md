@@ -57,3 +57,7 @@ Launch ```cap automatic```to deploy mesos masters and slaves on Grid'5000 nodes.
 # Verify the installation
 
 Please refer to http://mesosphere.com/docs/getting-started/datacenter/install/#verifying-installation
+
+# License
+
+See ```Licence``` file.
