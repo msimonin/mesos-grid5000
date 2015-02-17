@@ -12,24 +12,29 @@ Keywords : Grid'5000, puppet, capistrano, hiera, xp5k
 Excerpt from ```config/deploy/xp5k.rb``` :
 
 ```ruby
+MASTER = 3
+SLAVE = 3
+set :site, ENV['site'] || "toulouse"
+set :walltime, ENV['walltime'] || "02:00:00"
+
+$myxp = XP5K::XP.new(:logger => logger)
+
 $myxp.define_job({
-  :resources  => ["nodes=13, walltime=#{walltime}"],
+  :resources  => ["nodes=#{MASTER + SLAVE}, walltime=#{walltime}"],
   :site       => "#{site}",
   :retry      => true,
   :goal       => "100%",
   :types      => ["deploy"],
   :name       => "init" ,
   :roles      =>  [
-    XP5K::Role.new({ :name => 'master', :size => 3 }),
-    XP5K::Role.new({ :name => 'slave', :size => 10 }),  
+    XP5K::Role.new({ :name => 'master', :size => MASTER }),
+    XP5K::Role.new({ :name => 'slave', :size => SLAVE }),
   ],
-
   :command    => "sleep 86400"
-  })
-```
+  })```
 
 * master nodes and zookeeper nodes are colocated
-* quorum is set to 2 (hard coded for now)
+* quorum is set to MASTER/2 + 1
 * feel free to increase the number of slaves.
 
 
@@ -40,7 +45,7 @@ $myxp.define_job({
 * ```cap -T``` will show :
 
 ```bash
-automatic    # Automatic deployment
+cap automatic    # Automatic deployment
 cap clean        # Remove all running jobs
 cap deploy       # Deploy with Kadeploy
 cap describe     # Describe the cluster

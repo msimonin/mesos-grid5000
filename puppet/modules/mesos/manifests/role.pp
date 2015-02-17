@@ -42,7 +42,7 @@ class mesos::role{
 
   # hard coded -> fix?  
   file{ '/etc/mesos-master/quorum':
-    content => 2,
+    content => template("mesos/quorum.erb"),
     require => Package['mesos'],
     notify  => Service['mesos-master']
   }

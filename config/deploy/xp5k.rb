@@ -5,21 +5,24 @@ require 'erb'
 
 XP5K::Config.load
 
+MASTER = 3
+SLAVE = 3
 set :site, ENV['site'] || "toulouse"
 set :walltime, ENV['walltime'] || "02:00:00"
+
 
 $myxp = XP5K::XP.new(:logger => logger)
 
 $myxp.define_job({
-  :resources  => ["nodes=4, walltime=#{walltime}"],
+  :resources  => ["nodes=#{MASTER + SLAVE}, walltime=#{walltime}"],
   :site       => "#{site}",
   :retry      => true,
   :goal       => "100%",
   :types      => ["deploy"],
   :name       => "init" , 
   :roles      =>  [
-    XP5K::Role.new({ :name => 'master', :size => 3 }),
-    XP5K::Role.new({ :name => 'slave', :size => 1 }),
+    XP5K::Role.new({ :name => 'master', :size => MASTER }),
+    XP5K::Role.new({ :name => 'slave', :size => SLAVE }),
   ],
 
   :command    => "sleep 86400"
