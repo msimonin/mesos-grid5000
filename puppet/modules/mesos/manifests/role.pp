@@ -1,6 +1,9 @@
 class mesos::role{
   
   $zhosts = hiera("mesos::masters")
+  $hadoop_url = hiera("hadoop::url")
+  $namenode = hiera("hadoop::dfs::namenode")
+  $replication = hiera("hadoop::dfs::replication")
   
   # install mesos key
   exec{'mesos-key':
@@ -47,5 +50,42 @@ class mesos::role{
     notify  => Service['mesos-master']
   }
 
+  ## HDFS
+
+  exec{ 'hadoop_tarball':
+    command => "wget $hadoop_url -O /opt/hadoop.tar.gz",
+    path    => ['/usr/bin'],
+    creates  => '/opt/hadoop.tar.gz'
+  }
+
+  exec { 'hadoop_extract':
+    command => "tar -xzf hadoop.tar.gz",
+    path    => ["/bin"],
+    cwd     => '/opt',
+    require => Exec['hadoop_tarball']
+  }
+
+  exec { 'hadoop_rename':
+    command => 'mv hadoop-* hadoop',
+    path    => ['/bin', '/usr/bin'],
+    cwd     => '/opt',
+    onlyif  => 'test ! -d hadoop',
+    require => Exec['hadoop_extract']
+  }
+
+  file { '/opt/hadoop/conf/core-site.xml':
+    content => template("mesos/core-site.xml.erb"),
+    require => Exec['hadoop_rename']
+  }
+
+  file { '/opt/hadoop/conf/hdfs-site.xml':
+    content => template("mesos/hdfs-site.xml.erb"),
+    require => Exec['hadoop_rename']
+  }
+
+  file { '/opt/hadoop/conf/hadoop-env.sh':
+    content => template("mesos/hadoop-env.sh.erb"),
+    require => Exec['hadoop_rename']
+  }
 
 }

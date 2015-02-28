@@ -5,8 +5,9 @@ require 'erb'
 
 XP5K::Config.load
 
-MASTER = 3
+MASTER = 1
 SLAVE = 3
+
 set :site, ENV['site'] || "toulouse"
 set :walltime, ENV['walltime'] || "02:00:00"
 

@@ -1,7 +1,13 @@
 --- 
-mesos::masters:<% @masters.each do |master| -%> 
+hadoop::url: "http://www.eu.apache.org/dist/hadoop/common/hadoop-1.2.1/hadoop-1.2.1.tar.gz"
+hadoop::dfs::replication: 3
+hadoop::dfs::namenode: <%= @namenode.to_s %>
+hadoop::dfs::datanodes: <% @datanodes.each do |datanode| -%> 
+  - <%= datanode -%>
+<% end %>
+mesos::masters: <% @masters.each do |master| -%> 
   - <%= master -%>
 <% end %>
-mesos::slaves:<% @slaves.each do |slave| -%> 
-  - <%= slave-%>
+mesos::slaves: <% @slaves.each do |slave| -%> 
+  - <%= slave -%>
 <% end %>

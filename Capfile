@@ -13,8 +13,6 @@ proxy = {
   'https_proxy' => 'http://proxy:3128',
   'http_proxy' => 'http://proxy:3128',
 }
-# global sequence of tasks
-after "automatic", "xp5k"
 
 desc 'Automatic deployment'
 task :automatic do
@@ -76,6 +74,9 @@ namespace :mesos do
     task :generateHiera do
       @masters = find_servers :roles => [:mesos_master]
       @slaves = (find_servers :roles => [:mesos_slave])
+      @namenode = (find_servers :roles => [:namenode]).first.host
+      @datanodes = (find_servers :roles => [:datanode])
+
       # generate common.yaml
       template = File.read("templates/common.yaml.erb")
       renderer = ERB.new(template, nil, '-<>')
@@ -113,6 +114,35 @@ namespace :mesos do
     end
 
   end
+
+  namespace :hdfs do
+    
+    desc 'format the HDFS'
+    task :create, :roles => [:namenode] do
+      run "/opt/hadoop/bin/hadoop namenode -format"   
+    end
+  
+    namespace :start do
+      
+      desc 'Start the HDFS cluster' 
+      task :default do
+        namenode
+        datanode
+      end
+
+      task :namenode, :roles => [:namenode] do
+        run "/opt/hadoop/bin/hadoop-daemon.sh start namenode"
+      end
+
+      task :datanode, :roles => [:datanode] do
+        run "/opt/hadoop/bin/hadoop-daemon.sh start datanode"
+      end
+
+    end
+
+
+  end
+
 
 end
 
