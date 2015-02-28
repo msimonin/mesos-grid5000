@@ -31,7 +31,8 @@ $myxp.define_job({
     XP5K::Role.new({ :name => 'slave', :size => SLAVE }),
   ],
   :command    => "sleep 86400"
-  })```
+  })
+```
 
 * master nodes and zookeeper nodes are colocated
 * quorum is set to MASTER/2 + 1
