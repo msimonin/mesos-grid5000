@@ -115,34 +115,33 @@ namespace :mesos do
 
   end
 
-  namespace :hdfs do
-    
-    desc 'format the HDFS'
-    task :create, :roles => [:namenode] do
-      run "/opt/hadoop/bin/hadoop namenode -format"   
-    end
-  
-    namespace :start do
-      
-      desc 'Start the HDFS cluster' 
-      task :default do
-        namenode
-        datanode
-      end
-
-      task :namenode, :roles => [:namenode] do
-        run "/opt/hadoop/bin/hadoop-daemon.sh start namenode"
-      end
-
-      task :datanode, :roles => [:datanode] do
-        run "/opt/hadoop/bin/hadoop-daemon.sh start datanode"
-      end
-
-    end
-
-
-  end
-
 
 end
+
+namespace :hdfs do
+  
+  desc 'format the HDFS'
+  task :create, :roles => [:namenode] do
+    run "/opt/hadoop/bin/hadoop namenode -format"   
+  end
+
+  namespace :start do
+    
+    desc 'Start the HDFS cluster' 
+    task :default do
+      namenode
+      datanode
+    end
+
+    task :namenode, :roles => [:namenode] do
+      run "/opt/hadoop/bin/hadoop-daemon.sh start namenode"
+    end
+
+    task :datanode, :roles => [:datanode] do
+      run "/opt/hadoop/bin/hadoop-daemon.sh start datanode"
+    end
+
+  end # namespace start
+end # namespace hdfs
+
 

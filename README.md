@@ -1,7 +1,7 @@
 Mesos-grid5000
 ==============
 
-Deploy a mesos cluster on Grid'5000.
+Deploy a Mesos/HDFS cluster on Grid'5000.
 
 Inspired by http://mesosphere.com/docs/getting-started/datacenter/install/
 
@@ -35,7 +35,8 @@ $myxp.define_job({
 
 * master nodes and zookeeper nodes are colocated
 * quorum is set to MASTER/2 + 1
-* feel free to increase the number of slaves.
+* HDFS namenode is deployed on the first master node
+* HDFS datanodes are deployed on slave nodes
 
 
 # Play with mesos
@@ -49,15 +50,20 @@ cap automatic    # Automatic deployment
 cap clean        # Remove all running jobs
 cap deploy       # Deploy with Kadeploy
 cap describe     # Describe the cluster
+cap hdfs:create  # format the HDFS
+cap hdfs:start   # Start the HDFS cluster
 cap invoke       # Invoke a single command on the remote servers.
 cap mesos        # Deploy mesos
 cap mesos:puppet # Configure nodes using puppet
 cap shell        # Begin an interactive Capistrano session.
 cap submit       # Submit jobs
-````
+```
 
+Typical workflow :
 
-Launch ```cap automatic```to deploy mesos masters and slaves on Grid'5000 nodes.
+* ```cap automatic```to deploy the Mesos and HDFS cluster
+* ```cap hdfs:create hdfs:start``` to format and start the HDFS
+
 
 # Verify the installation
 
