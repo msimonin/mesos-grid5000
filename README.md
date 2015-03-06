@@ -39,7 +39,7 @@ $myxp.define_job({
 * HDFS namenode is deployed on the first master node
 * HDFS datanodes are deployed on slave nodes
 
-Create the file ```~/.xpm/connection.rb``` and adapt to following to your configuration:
+Create the file ```~/.xpm/connection.rb``` and adapt the following to your configuration:
 
 ```
 set :g5k_user, "msimonin"
