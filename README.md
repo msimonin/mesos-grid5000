@@ -85,3 +85,8 @@ Please refer to http://mesosphere.com/docs/getting-started/datacenter/install/#v
 # License
 
 See ```Licence``` file.
+
+# Future
+
+- [ ] Support docker isolation
+- [ ] Allow deployment of frameworks (Hadoop, Aurora, Storm, Myriad)
